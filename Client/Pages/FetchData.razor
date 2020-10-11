@@ -9,7 +9,7 @@
 
 @if (teams == null)
 {
-    <p><em>Loading...</em></p>
+    <p class="@statucCss"><em>@statusText</em></p>
 }
 else
 {
@@ -34,12 +34,26 @@ else
 
 @code {
     private Team[] teams;
+    private string statusText = "Loading ...";
 
+    private string statucCss = "";
     protected override async Task OnInitializedAsync()
     {
-        teams = (await Http.GetFromJsonAsync<IEnumerable<Team>>("/api/Teams", new JsonSerializerOptions()
+        try
         {
-            PropertyNameCaseInsensitive = true
-        })).ToArray();
+            statusText = "Loading ...";
+            statucCss = "alert alert-light";
+            teams = (await Http.GetFromJsonAsync<IEnumerable<Team>>("/api/Teams", new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            })).ToArray();
+            statusText = "";
+        }
+        catch (Exception e)
+        {
+            statucCss = "alert alert-danger";
+            statusText = e.Message;
+        }
     }
+
 }

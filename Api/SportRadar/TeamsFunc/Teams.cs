@@ -65,7 +65,14 @@ namespace BlazorApp.Api.SportRadar.TeamsFunc
             catch (Exception e)
             {
                 log.LogError(e, "Error gettings result. {ErrorMessage}", e.Message);
-                return new InternalServerErrorResult();
+                return new JsonResult(new
+                {
+                    Error = e,
+                    e.Message
+                })
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError
+                };
             }
         }
 

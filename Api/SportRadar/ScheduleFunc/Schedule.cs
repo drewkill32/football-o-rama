@@ -38,7 +38,15 @@ namespace BlazorApp.Api.SportRadar.ScheduleFunc
             catch (Exception e)
             {
                 log.LogError(e, "Error gettings result. {ErrorMessage}", e.Message);
-                return new InternalServerErrorResult();
+                log.LogError(e, "Error gettings result. {ErrorMessage}", e.Message);
+                return new JsonResult(new
+                {
+                    Error = e,
+                    e.Message
+                })
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError
+                };
             }
         }
 
@@ -62,7 +70,15 @@ namespace BlazorApp.Api.SportRadar.ScheduleFunc
             catch (Exception e)
             {
                 log.LogError(e, "Error gettings result. {ErrorMessage}", e.Message);
-                return new InternalServerErrorResult();
+                log.LogError(e, "Error gettings result. {ErrorMessage}", e.Message);
+                return new JsonResult(new
+                {
+                    Error = e,
+                    e.Message
+                })
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError
+                };
             }
         }
 
