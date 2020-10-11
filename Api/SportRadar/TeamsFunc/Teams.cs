@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
 
 namespace BlazorApp.Api.SportRadar.TeamsFunc
 {
@@ -31,12 +30,13 @@ namespace BlazorApp.Api.SportRadar.TeamsFunc
             {
                 var query = new TableQuery<TeamTableEntity>() { TakeCount = 250 }; //there is only 130 teams. Make sure the query returns all teams in one pass
                 var teamTableResults = (await teamsTable.ExecuteQuerySegmentedAsync(query, null)).Results;
+                log.LogInformation("received {Teams} teams from Azure Teams", teamTableResults.Count);
                 var models = teamTableResults.Select(TableEntityMapping.ToTeamModel);
                 return new OkObjectResult(models);
             }
             catch (Exception e)
             {
-                log.LogError(e, "Error gettings result. {ErrorMessage}", e.Message);
+                log.LogError(e, "Error getting result. {ErrorMessage}", e.Message);
                 return new JsonResult(new
                 {
                     Error = e,
@@ -57,14 +57,15 @@ namespace BlazorApp.Api.SportRadar.TeamsFunc
             try
             {
                 var teamTableResults = await GetTeamsFromSportsRadar();
+                log.LogInformation("received {Teams} teams from SportRadar Teams", teamTableResults.Count);
                 await teamsTable.InsertOrMergeAll(teamTableResults);
-
+                log.LogInformation("updated {Teams} teams from SportRadar Teams", teamTableResults.Count);
                 var models = teamTableResults.Select(TableEntityMapping.ToTeamModel);
                 return new CreatedResult("teams",models);
             }
             catch (Exception e)
             {
-                log.LogError(e, "Error gettings result. {ErrorMessage}", e.Message);
+                log.LogError(e, "Error getting result. {ErrorMessage}", e.Message);
                 return new JsonResult(new
                 {
                     Error = e,

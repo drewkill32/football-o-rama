@@ -19,10 +19,10 @@ namespace BlazorApp.Api
 
         public static class Azure
         {
+            public const string AppInsightsKey = "APPINSIGHTS_INSTRUMENTATIONKEY";
             public const string Teams = "Teams";
             public const string ConnectionStringKey = "AzureWebJobsStorage";
             public const string Schedule = "Schedule";
-            public const string Season = "Season";
             public const string Week = "Week";
         }
         

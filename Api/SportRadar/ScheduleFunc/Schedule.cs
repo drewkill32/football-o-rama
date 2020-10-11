@@ -31,14 +31,13 @@ namespace BlazorApp.Api.SportRadar.ScheduleFunc
             {
                 var query = new TableQuery<GameTableType>() { TakeCount = 1000 };
                 var scheduleTableEntities = (await scheduleTable.ExecuteQuerySegmentedAsync(query, null)).Results;
-
+                log.LogInformation("Received {Games} games from Azure Table", scheduleTableEntities.Count);
                 var models = scheduleTableEntities.ToWeeksModel();
                 return new OkObjectResult(models);
             }
             catch (Exception e)
             {
-                log.LogError(e, "Error gettings result. {ErrorMessage}", e.Message);
-                log.LogError(e, "Error gettings result. {ErrorMessage}", e.Message);
+                log.LogError(e, "Error getting result. {ErrorMessage}", e.Message);
                 return new JsonResult(new
                 {
                     Error = e,
@@ -60,17 +59,17 @@ namespace BlazorApp.Api.SportRadar.ScheduleFunc
             try
             {
                 var radarSchedule = await GetSportRadarSchedule();
+                log.LogInformation("Received {Games} games from SportRadar",radarSchedule.Weeks.SelectMany(x=> x.Games).Count());
                 var weekEntities = GetWeeks(radarSchedule);
                 var scheduleTableEntities = GetGames(radarSchedule);
                 await Task.WhenAll(scheduleTable.InsertOrMergeAll(scheduleTableEntities), weekTable.InsertOrMergeAll(weekEntities));
-
+                log.LogInformation("Updated Week and Schedule tables");
                 var models = scheduleTableEntities.ToWeeksModel();
                 return  new CreatedResult("schedule",models);
             }
             catch (Exception e)
             {
-                log.LogError(e, "Error gettings result. {ErrorMessage}", e.Message);
-                log.LogError(e, "Error gettings result. {ErrorMessage}", e.Message);
+                log.LogError(e, "Error getting result. {ErrorMessage}", e.Message);
                 return new JsonResult(new
                 {
                     Error = e,
