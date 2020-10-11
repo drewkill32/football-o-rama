@@ -15,6 +15,7 @@ using System.Web.Http;
 
 namespace BlazorApp.Api.SportRadar.ScheduleFunc
 {
+    [StorageAccount(Keys.Azure.AzureStorage)]
     public class Schedule : SportRadarBase
     {
         public Schedule(IHttpClientFactory httpClientFactory, IConfiguration configuration) : base(httpClientFactory, configuration)

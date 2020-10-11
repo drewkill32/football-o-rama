@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace BlazorApp.Api.SportRadar.TeamsFunc
 {
+    [StorageAccount(Keys.Azure.AzureStorage)]
     public class Teams : SportRadarBase
     {
         public Teams(IHttpClientFactory httpClientFactory, IConfiguration configuration) : base(httpClientFactory, configuration)
