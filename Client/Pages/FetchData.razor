@@ -1,34 +1,31 @@
 @page "/fetchdata"
-@using BlazorApp.Shared 
+@using BlazorApp.Shared
+@using System.Text.Json
 @inject HttpClient Http
 
 <h1>Weather forecast</h1>
 
 <p>This component demonstrates fetching data from the server.</p>
 
-@if (forecasts == null)
+@if (teams == null)
 {
-    <p><em>Loading...</em></p>
+    <p class="@statucCss"><em>@statusText</em></p>
 }
 else
 {
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
+                <th>Team</th>
+                <th>Conference</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var team in teams)
             {
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
+                    <td>@team.Market @team.Name</td>
+                    <td>@team.Conference.Name</td>
                 </tr>
             }
         </tbody>
@@ -36,17 +33,27 @@ else
 }
 
 @code {
-    private WeatherForecast[] forecasts;
+    private Team[] teams;
+    private string statusText = "Loading ...";
 
+    private string statucCss = "";
     protected override async Task OnInitializedAsync()
     {
-      try
-      {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("/api/WeatherForecast");
-      }
-      catch (Exception ex)
-      {
-        Console.WriteLine(ex.ToString());
-      }
+        try
+        {
+            statusText = "Loading ...";
+            statucCss = "alert alert-light";
+            teams = (await Http.GetFromJsonAsync<IEnumerable<Team>>("/api/Teams", new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            })).ToArray();
+            statusText = "";
+        }
+        catch (Exception e)
+        {
+            statucCss = "alert alert-danger";
+            statusText = e.Message;
+        }
     }
+
 }
