@@ -23,7 +23,7 @@ namespace BlazorApp.Api.SportRadar.TeamsFunc
         [FunctionName("Teams")]
         public async Task<IActionResult> RunGet(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "teams")] HttpRequest req,
-            [Table(Keys.Azure.Teams, Connection = Keys.Azure.ConnectionStringKey)] CloudTable teamsTable,
+            [Table(Keys.Azure.Teams)] CloudTable teamsTable,
             ILogger log)
         {
             try
@@ -51,7 +51,7 @@ namespace BlazorApp.Api.SportRadar.TeamsFunc
         [FunctionName("TeamsUpdate")]
         public async Task<IActionResult> RunPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "teams/update")] HttpRequest req,
-            [Table(Keys.Azure.Teams, Connection = Keys.Azure.ConnectionStringKey)] CloudTable teamsTable,
+            [Table(Keys.Azure.Teams)] CloudTable teamsTable,
             ILogger log)
         {
             try

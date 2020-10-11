@@ -24,7 +24,7 @@ namespace BlazorApp.Api.SportRadar.ScheduleFunc
         [FunctionName("Schedule")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "schedule")] HttpRequest req,
-            [Table(Keys.Azure.Schedule, Connection = Keys.Azure.ConnectionStringKey)] CloudTable scheduleTable,
+            [Table(Keys.Azure.Schedule)] CloudTable scheduleTable,
             ILogger log)
         {
             try
@@ -52,8 +52,8 @@ namespace BlazorApp.Api.SportRadar.ScheduleFunc
         [FunctionName("ScheduleUpdate")]
         public async Task<IActionResult> RunPost(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "schedule/update")] HttpRequest req,
-            [Table(Keys.Azure.Schedule, Connection = Keys.Azure.ConnectionStringKey)] CloudTable scheduleTable,
-            [Table(Keys.Azure.Week, Connection = Keys.Azure.ConnectionStringKey)] CloudTable weekTable,
+            [Table(Keys.Azure.Schedule)] CloudTable scheduleTable,
+            [Table(Keys.Azure.Week)] CloudTable weekTable,
             ILogger log)
         {
             try
