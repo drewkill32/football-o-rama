@@ -1,7 +1,7 @@
 @page "/fetchdata"
-@using BlazorApp.Shared
-@using System.Text.Json
+
 @inject HttpClient Http
+@attribute [Authorize()]
 
 <h1>Weather forecast</h1>
 
@@ -59,11 +59,11 @@ else
             teams = (await Http.GetFromJsonAsync<IEnumerable<Team>>("/api/Teams", new JsonSerializerOptions()
             {
                 PropertyNameCaseInsensitive = true
-            })).OrderBy(x=> x.Name).ToArray();
+            })).OrderBy(x => $"{x.Market} {x.Name}").ToArray();
 
             conferences = teams.Select(t => t.Conference)
                 .Distinct(new ConferenceComparer())
-                .OrderBy(x=> x.Name)
+                .OrderBy(x => x.Name)
                 .ToArray();
             statusText = "";
         }

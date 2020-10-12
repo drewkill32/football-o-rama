@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BlazorApp.Api.Extensions;
 using BlazorApp.Api.SportRadar.ScheduleFunc;
+using BlazorApp.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos.Table;
@@ -21,6 +22,8 @@ namespace BlazorApp.Api.SportRadar.User
         public Users(IHttpClientFactory httpClientFactory, IConfiguration configuration) : base(httpClientFactory, configuration)
         {
         }
+
+
 
         [FunctionName("User")]
         public async Task<IActionResult> Create(

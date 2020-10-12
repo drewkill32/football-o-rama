@@ -1,0 +1,11 @@
+{
+  "clientPrincipal": {
+    "identityProvider": "google",
+    "userId": "somekey504406nminvaiotrnbot",
+    "userDetails": "sample@gmail.com",
+    "userRoles": [
+      "anonymous",
+      "authenticated"
+    ]
+  }
+}

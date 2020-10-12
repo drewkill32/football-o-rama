@@ -1,0 +1,11 @@
+﻿@inherits LayoutComponentBase
+
+
+<AuthorizeView>
+    <Authorized>
+        <a href="/logout?post_logout_redirect_uri=/">Log out </a>
+    </Authorized>
+    <NotAuthorized>
+        <a href="/login">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>
