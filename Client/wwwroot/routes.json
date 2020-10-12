@@ -2,7 +2,11 @@
   "routes": [
     {
       "route": "/login",
-      "serve": "/.auth/login/github"
+      "serve": "/.auth/login/google"
+    },
+    {
+      "route": "/logout",
+      "serve": "/.auth/logout"
     },
     {
       "route": "/*",

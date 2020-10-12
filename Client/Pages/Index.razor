@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using System.Text.Json
 
 @inject HttpClient Http
 @inject IWebAssemblyHostEnvironment HostEnvironment
@@ -8,13 +9,27 @@
 <h1>Hello, world!</h1>
 @if (identity == null)
 {
+    if (HostEnvironment.IsDevelopment())
+    {
+        <button class="btn btn-primary" @onclick="LogIn">Login</button>
+    }
+    else
+    {
+        <a href="/login" class="btn btn-primary">Login</a>
+    }
 
-<button class="btn btn-primary" @onclick="LogIn">Login</button>
 
 }
 else
 {
-<button class="btn btn-primary" @onclick="LogOut">LogOut</button>
+    if (HostEnvironment.IsDevelopment())
+    {
+        <button class="btn btn-primary" @onclick="LogOut">LogOut</button>
+    }
+    else
+    {
+        <a href="/logout" class="btn btn-primary">Logout</a>
+    }
 
 }
 
@@ -28,7 +43,10 @@ else
         identity = await LocalStorage.GetItemAsync<ClientIdentity>("User");
         if (identity == null && HostEnvironment.IsProduction())
         {
-            identity = await Http.GetFromJsonAsync<ClientIdentity>(".auth/me");
+            identity = (await Http.GetFromJsonAsync<Principal>(".auth/me",new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            })).ClientPrincipal;
             if (identity != null)
             {
                 await LocalStorage.SetItemAsync("User", identity);
@@ -44,7 +62,7 @@ else
             identity = new ClientIdentity()
             {
                 UserDetails = "drew@killion.me",
-                UserRoles = new []{"anonymous","authenticated"},
+                UserRoles = new[] { "anonymous", "authenticated" },
                 UserId = Guid.NewGuid().ToString(),
                 IdentityProvider = "google"
             };
@@ -67,4 +85,8 @@ else
         await LocalStorage.RemoveItemAsync("User");
     }
 
+    public partial class Principal
+    {
+        public ClientIdentity ClientPrincipal { get; set; }
+    }
 }
