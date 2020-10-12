@@ -1,8 +1,10 @@
 using System.Net.Http;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 
 namespace BlazorApp.Api.SportRadar
 {
+    [StorageAccount(Keys.Azure.AzureStorage)]
     public class SportRadarBase
     {
         protected HttpClient HttpClient;

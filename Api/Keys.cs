@@ -24,6 +24,7 @@ namespace BlazorApp.Api
             public const string AzureStorage = "AzureStorage";
             public const string Schedule = "Schedule";
             public const string Week = "Week";
+            public const string User = "Users";
         }
         
     }

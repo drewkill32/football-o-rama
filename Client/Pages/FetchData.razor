@@ -13,6 +13,13 @@
 }
 else
 {
+    <label for="inputState">State</label>
+    <select id="inputState" class="form-control" @onchange="ConfChange">
+        @foreach (var conf in conferences)
+        {
+            <option value="@conf.Id">@conf.Name</option>
+        }
+    </select>
     <table class="table">
         <thead>
             <tr>
@@ -35,8 +42,14 @@ else
 @code {
     private Team[] teams;
     private string statusText = "Loading ...";
-
+    private Conference[] conferences;
     private string statucCss = "";
+
+    private void ConfChange()
+    {
+
+    }
+
     protected override async Task OnInitializedAsync()
     {
         try
@@ -46,7 +59,12 @@ else
             teams = (await Http.GetFromJsonAsync<IEnumerable<Team>>("/api/Teams", new JsonSerializerOptions()
             {
                 PropertyNameCaseInsensitive = true
-            })).ToArray();
+            })).OrderBy(x=> x.Name).ToArray();
+
+            conferences = teams.Select(t => t.Conference)
+                .Distinct(new ConferenceComparer())
+                .OrderBy(x=> x.Name)
+                .ToArray();
             statusText = "";
         }
         catch (Exception e)
@@ -55,5 +73,6 @@ else
             statusText = e.Message;
         }
     }
+
 
 }
