@@ -73,8 +73,8 @@ else
         await LocalStorage.RemoveItemAsync("User");
         if (HostEnvironment.IsProduction())
         {
-
-            NavManager.NavigateTo("/logout");
+            
+            NavManager.NavigateTo($"{NavManager.BaseUri}logout");
         }
     }
 
