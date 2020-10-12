@@ -10,15 +10,16 @@ namespace BlazorApp.Api.Extensions
     public static class CloudTableExtensions
     {
 
-        public static async Task InsertOrMergeAll(this CloudTable table, IEnumerable<TableEntity> entities)
+        public static Task InsertOrMergeAll(this CloudTable table, IEnumerable<TableEntity> entities)
         {
-            var tasks = entities
-                .Select(TableOperation.InsertOrMerge)
-                .Select(table.ExecuteAsync)
-                .Cast<Task>()
-                .ToArray();
+            var batchOp = new TableBatchOperation();
+            foreach (var entity in entities)
+            {
+                batchOp.InsertOrReplace(entity);
+            }
 
-            await Task.WhenAll(tasks);
+            return table.ExecuteBatchAsync(batchOp);
+
         }
     }
 }
