@@ -22,14 +22,8 @@
 }
 else
 {
-    if (HostEnvironment.IsDevelopment())
-    {
-        <button class="btn btn-primary" @onclick="LogOut">LogOut</button>
-    }
-    else
-    {
-        <a href="/logout" class="btn btn-primary">Logout</a>
-    }
+    <button class="btn btn-primary" @onclick="LogOut">LogOut</button>
+    
 
 }
 
@@ -76,13 +70,12 @@ else
 
     private async Task LogOut()
     {
+        await LocalStorage.RemoveItemAsync("User");
         if (HostEnvironment.IsProduction())
         {
-            NavManager.NavigateTo(".auth/logout");
-        }
 
-        identity = null;
-        await LocalStorage.RemoveItemAsync("User");
+            NavManager.NavigateTo("/logout");
+        }
     }
 
     public partial class Principal
